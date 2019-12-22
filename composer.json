@@ -1,0 +1,30 @@
+{
+  "require": {
+    "vlucas/phpdotenv": "^4.1",
+    "davedevelopment/phpmig": "^1.5",
+    "ext-mysqli": "*",
+    "ext-json": "*",
+    "ext-xmlwriter": "*",
+    "ext-xmlreader": "*",
+    "ext-PDO": "*",
+    "ext-curl": "*",
+    "ext-ftp": "*",
+    "ext-gd": "*",
+    "ext-fileinfo": "*",
+    "ext-posix": "*",
+    "ext-iconv": "*",
+    "ext-zip": "*",
+    "ext-libxml": "*",
+    "ext-simplexml": "*",
+    "ext-soap": "*",
+    "ext-mbstring": "*",
+    "ext-dom": "*",
+    "twig/twig": "^3.0"
+  },
+  "autoload": {
+    "classmap": [
+      "Settings",
+      "App"
+    ]
+  }
+}
