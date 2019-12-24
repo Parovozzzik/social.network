@@ -4,7 +4,9 @@ namespace App\Models\Entities;
 
 class Entity
 {
+    /** @var string */
     public static $table;
+    /** @var string */
     public static $idColumn;
 
     /**
@@ -50,7 +52,6 @@ class Entity
             $getter = 'get' . ucfirst($propertyName);
 
             if (method_exists($this, $getter)) {
-
                 if (is_object($this->$getter())) {
                     /** @var Entity $obj */
                     $obj = $this->$getter();

@@ -21,7 +21,7 @@ class User extends Model
      * @param ERegistrationUser $registrationUser
      * @return EUserResponse
      */
-    public function registration(ERegistrationUser $registrationUser)
+    public function registration(ERegistrationUser $registrationUser): EUserResponse
     {
         $response = new EUserResponse();
         if ($this->existsByEmail($registrationUser->getEmail()) === false) {
@@ -71,7 +71,7 @@ class User extends Model
      * @param ELoginUser $loginUser
      * @return EUserResponse
      */
-    public function login(ELoginUser $loginUser)
+    public function login(ELoginUser $loginUser): EUserResponse
     {
         $response = new EUserResponse();
         if ($this->existsByEmail($loginUser->getEmail()) === true) {

@@ -6,7 +6,6 @@ use App\Models\Entities\EUser;
 use App\Models\Entities\Requests\ELoginUser;
 use App\Models\Entities\Requests\ERegistrationUser;
 use App\Models\Entities\Responses\EUserResponse;
-use App\Models\Entities\Responses\Response;
 use App\Models\User;
 
 /**
@@ -15,13 +14,29 @@ use App\Models\User;
  */
 class UsersController extends Controller
 {
+    /**
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function index()
     {
         $response = new EUserResponse();
         $response->setView('users.index');
+
         return $this->render($response);
     }
 
+    /**
+     * @param int $id
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function view(int $id)
     {
         $userModel = new User();
@@ -39,6 +54,13 @@ class UsersController extends Controller
         return $this->render($response);
     }
 
+    /**
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function login()
     {
         $request = $_POST['user'];
@@ -49,16 +71,22 @@ class UsersController extends Controller
 
             $userModel = new User();
             $response = $userModel->login($loginDto);
-            $response->setView('users.login');
         } else {
             $response = new EUserResponse();
-            $response->setView('users.login');
         }
+        $response->setView('users.login');
 
         return $this->render($response);
     }
 
-    public function registration(): Response
+    /**
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function registration()
     {
         $request = $_POST['user'];
         if (isset($request)) {
@@ -71,15 +99,21 @@ class UsersController extends Controller
         }
         $response->setView('users.registration');
 
-        return $response;
+        return $this->render($response);
     }
 
+    /**
+     *
+     */
     public function restorePassword()
     {
 
 
     }
 
+    /**
+     *
+     */
     public function resetPassword()
     {
 

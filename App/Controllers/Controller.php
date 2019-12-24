@@ -13,6 +13,7 @@ use Twig\Loader\FilesystemLoader;
  */
 class Controller
 {
+    /** @var string */
     const HEAD_LAYOUT = 'App/Views/Templates/layout.twig';
 
     /**
@@ -29,6 +30,7 @@ class Controller
         $twig = new Environment($loader);
 
         $path = Helper::getViewPath($response->getView());
+
         echo $twig->render(self::HEAD_LAYOUT,
             [
                 'name' => 'John Doe',

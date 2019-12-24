@@ -15,7 +15,6 @@ class Model
     protected $entity;
     /** @var string */
     protected $entityName;
-
     /** @var false|\mysqli */
     protected $connection;
 
@@ -43,7 +42,10 @@ class Model
      */
     public function get(int $id): array
     {
-        $query = $this->connection->prepare("SELECT * FROM {$this->entity::$table} WHERE {$this->entity::$idColumn} = ?");
+        $query = $this->connection->prepare(
+            "SELECT * 
+            FROM {$this->entity::$table} 
+            WHERE {$this->entity::$idColumn} = ?");
         $query->bindParam(1, $id);
         $query->execute();
 
