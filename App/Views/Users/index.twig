@@ -1,1 +1,52 @@
-List Of Users
+<div class="g-pa-20">
+    <div class="media">
+        <div class="d-flex align-self-center">
+            <h1 class="g-font-weight-300 g-font-size-28 g-color-black mb-0">Users</h1>
+        </div>
+    </div>
+
+    <hr class="d-flex g-brd-gray-light-v7 g-my-30">
+
+    <table class="table w-100 g-mb-25">
+        <thead class="g-hidden-sm-down g-color-gray-dark-v6">
+        <tr>
+            <th class="g-bg-gray-light-v8 g-font-weight-400 g-valign-middle g-brd-bottom-none g-py-15 g-pl-25">
+                <div class="d-flex align-items-center justify-content-between">
+                    #
+                </div>
+            </th>
+            <th class="g-bg-gray-light-v8 g-font-weight-400 g-valign-middle g-brd-bottom-none g-py-15">
+                <div class="d-flex align-items-center justify-content-between">
+                    Email
+                </div>
+            </th>
+            <th class="g-bg-gray-light-v8 g-font-weight-400 g-valign-middle g-brd-bottom-none g-py-15">
+                <div class="d-flex align-items-center justify-content-between">
+                    Registration Date
+                </div>
+            </th>
+            <th class="g-bg-gray-light-v8 g-font-weight-400 g-valign-middle g-brd-bottom-none g-py-15">
+                <div class="d-flex align-items-center justify-content-between">
+                    Update Date
+                </div>
+            </th>
+            <th class="g-bg-gray-light-v8 g-font-weight-400 g-valign-middle g-brd-bottom-none g-py-15">
+                <div class="d-flex align-items-center justify-content-between">
+                    Status
+                </div>
+            </th>
+            <th class="g-bg-gray-light-v8 g-font-weight-400 g-valign-middle g-brd-bottom-none g-py-15 g-pr-25"></th>
+        </tr>
+        </thead>
+
+        <tbody class="g-font-size-default g-color-black" id="accordion-09" role="tablist" aria-multiselectable="true">
+        {% for user in data.users %}
+            {{ include ('/App/Views/Users/list_item.twig', {user: user}) }}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+

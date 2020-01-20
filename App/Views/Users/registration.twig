@@ -1,8 +1,9 @@
 <div class="g-pa-20">
-    <h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-28">Login</h1>
+    <h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-28">Registration</h1>
     <div class="row">
         <div class="col-md-6">
-            <form action="/users/login" method="post"
+            {% if (params['request']|length == 0 or data['errors']|length > 0) %}
+            <form action="/users/registration" method="post"
                   class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md g-mb-30">
                 <div class="form-group g-mb-30">
                     <label class="g-mb-10" for="user_email">Email</label>
@@ -34,28 +35,42 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="d-flex align-items-center justify-content-between">
-                        <span>Запомнить?</span>
-                        <div class="u-check">
-                            <input class="g-hidden-xs-up g-pos-abs g-top-0 g-right-0" name="user[remember]"
-                                   {{ params['request']['remember'] == 1 ? 'checked' : '' }}
-                                   type="checkbox">
-                            <div class="u-check-icon-radio-v8">
-                                <i class="fa" data-check-icon=""></i>
-                            </div>
-                        </div>
-                    </label>
+                <div class="form-group g-mb-30">
+                    <label class="g-mb-10" for="user_repeat_password">Repeat Password</label>
+
+                    <div class="g-pos-rel">
+                        <input id="user_repeat_password" name="user[repeatPassword]"
+                               class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10"
+                               type="password" placeholder="Repeat Password" value="{{ params['request']['repeatPassword'] }}">
+                        {% if data['errors']['repeatPassword']|length > 0 %}
+                            <small class="g-font-weight-300 g-font-size-12 g-color-red g-pt-5">
+                                {{ data['errors']['repeatPassword'] }}
+                            </small>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <button class="btn btn-md btn-block u-btn-blue rounded text-uppercase g-py-13" type="submit">
-                    Login
+                    Registration
                 </button>
 
-                <a href="/users/registration" class="btn btn-md btn-block u-btn-outline-blue rounded text-uppercase g-py-13">
-                    Registration
+                <a href="/users/login" class="btn btn-md btn-block u-btn-outline-blue rounded text-uppercase g-py-13">
+                    Login
                 </a>
             </form>
+            {% else %}
+                <div class="noty_bar noty_type__success noty_theme__unify--v1 g-mb-25">
+                    <div class="noty_body">
+                        <div class="g-mr-20">
+                            <div class="noty_body__icon">
+                                <i class="hs-admin-check"></i>
+                            </div>
+                        </div>
+
+                        <div>{{ data['message'] }}</div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

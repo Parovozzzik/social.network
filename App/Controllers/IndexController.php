@@ -11,6 +11,16 @@ use App\Models\Entities\Responses\Response;
 class IndexController extends Controller
 {
     /**
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'index' => true,
+        ];
+    }
+
+    /**
      * @return string
      * @throws \ReflectionException
      * @throws \Twig\Error\LoaderError

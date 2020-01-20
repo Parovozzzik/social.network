@@ -1,0 +1,98 @@
+<div class="g-pa-20">
+    <div class="row">
+        {{ include ('/App/Views/Users/view_sidebar.twig', {user:data.model}) }}
+
+        <div class="col-md-9">
+            <div class="h-100 g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-20--md">
+                <form class="js-validate" novalidate="novalidate">
+                    <header>
+                        <h2 class="text-uppercase g-font-size-12 g-font-size-default--md g-color-black mb-0">General
+                            information</h2>
+                    </header>
+
+                    <hr class="d-flex g-brd-gray-light-v7 g-my-15 g-my-30--md">
+
+                    <div class="row g-mb-20">
+                        <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+                            <label class="mb-0" for="#firstName">First Name</label>
+                        </div>
+
+                        <div class="col-md-9 align-self-center">
+                            <div class="form-group g-pos-rel mb-0">
+                          <span class="g-pos-abs g-top-0 g-right-0 d-block g-width-40 h-100 opacity-0 g-opacity-1--success">
+                          <i class="hs-admin-check g-absolute-centered g-font-size-default g-color-secondary"></i>
+                        </span>
+                                <input id="firstName" name="firstName"
+                                       class="form-control h-100 form-control-md g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-brd-primary--error g-rounded-4 g-px-20 g-py-12"
+                                       type="text" value="Charlie" required="required"
+                                       data-msg="This field is mandatory" data-error-class="u-has-error-v3"
+                                       data-success-class="has-success" aria-required="true">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-mb-20">
+                        <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+                            <label class="mb-0" for="#lastName">Last Name</label>
+                        </div>
+
+                        <div class="col-md-9 align-self-center">
+                            <div class="form-group g-pos-rel mb-0">
+                          <span class="g-pos-abs g-top-0 g-right-0 d-block g-width-40 h-100 opacity-0 g-opacity-1--success">
+                          <i class="hs-admin-check g-absolute-centered g-font-size-default g-color-secondary"></i>
+                        </span>
+                                <input id="lastName" name="lastName"
+                                       class="form-control h-100 form-control-md g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-brd-primary--error g-rounded-4 g-px-20 g-py-12"
+                                       type="text" value="Bailey" required="required" data-msg="This field is mandatory"
+                                       data-error-class="u-has-error-v3" data-success-class="has-success"
+                                       aria-required="true">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-mb-20">
+                        <div class="col-md-3 align-self-center g-mb-5 g-mb-0--md">
+                            <label class="mb-0" for="#phone">Email</label>
+                        </div>
+
+                        <div class="col-md-9 align-self-center">
+                            <div class="row g-mx-minus-10">
+                                <div class="col-auto align-self-center g-width-270 g-px-10">
+                                    <div class="form-group g-pos-rel mb-0">
+                                        <span class="g-pos-abs g-top-0 g-right-0 d-block g-width-40 h-100 opacity-0 g-opacity-1--success">
+                                            <i class="hs-admin-check g-absolute-centered g-font-size-default g-color-secondary"></i>
+                                        </span>
+                                        <input id="phone" name="phone"
+                                               class="form-control h-100 form-control-md g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-brd-primary--error g-rounded-4 g-px-20 g-py-12"
+                                               type="tel" value="{{ user.email }}" required="required"
+                                               data-msg="This field is mandatory" data-error-class="u-has-error-v3"
+                                               data-success-class="has-success" aria-required="true">
+                                    </div>
+                                </div>
+
+                                <div class="col align-self-center g-hidden-md-down g-px-10">
+                                    <em class="d-flex align-self-center align-items-center g-font-style-normal g-color-gray-dark-v6">
+                                        <span class="g-pos-rel g-width-18 g-height-18 g-bg-secondary g-brd-around g-brd-secondary rounded-circle">
+                                          <i class="hs-admin-check g-absolute-centered g-font-weight-800 g-font-size-8 g-color-white"
+                                             title="Confirmed"></i>
+                                        </span>
+                                        <span class="g-hidden-lg-down g-font-weight-300 g-font-size-default g-color-secondary g-ml-8">Confirmed</span>
+                                    </em>
+                                </div>
+                                <div class="col align-self-center g-hidden-md-down g-px-10">
+                                    <em class="d-flex align-self-center align-items-center g-font-style-normal g-color-gray-dark-v6">
+                                        <span class="g-pos-rel g-width-18 g-height-18 g-brd-around g-brd-gray-light-v7 rounded-circle">
+                                            <i class="hs-admin-check g-absolute-centered g-font-weight-800 g-font-size-8 g-color-gray-light-v7"
+                                               title="Confirmed"></i>
+                                        </span>
+                                        <span class="g-hidden-lg-down g-font-weight-300 g-font-size-default g-color-gray-dark-v6 g-ml-8">Confirmed</span>
+                                    </em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

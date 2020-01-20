@@ -1,9 +1,9 @@
 <?php
 
+include 'vendor/autoload.php';
+
 use Dotenv\Dotenv;
 use Settings\Routes\Routes;
-
-include 'vendor/autoload.php';
 
 define('DS', DIRECTORY_SEPARATOR);
 
@@ -18,14 +18,15 @@ $actionName = null;
 foreach ($routes as $pattern => $settings) {
     if (preg_match($pattern, $path, $matches)) {
         $controllerName = $settings['controller'];
-        $actionName = mb_strtolower($settings['action']);
-        /*if (array_key_exists('params', $settings) && $settings['params']) {
+        $actionName = lcfirst($settings['action']);
+
+        if (array_key_exists('params', $settings) && $settings['params']) {
             foreach ($settings['params'] as $paramName) {
                 if (array_key_exists($paramName, $matches)) {
-                    $_REQUEST[$paramName] = filter_var($matches[$paramName], FILTER_SANITIZE_STRING); //add some safe mode
+                    $_REQUEST[$paramName] = filter_var($matches[$paramName], FILTER_SANITIZE_STRING);
                 }
             }
-        }*/
+        }
         break;
     }
 }
@@ -37,8 +38,15 @@ if (!class_exists($controllerFullName)) {
 
 try {
     $class = new $controller();
+
     if (method_exists($class, $actionName)) {
-        $class->$actionName();
+        $rules = $class->rules();
+
+        if ($rules[$actionName]) {
+            $class->$actionName();
+        } else {
+            echo header('Location: ' . '/');
+        }
     }
 } catch (\Throwable $e) {
     echo json_encode($e->getMessage());

@@ -12,6 +12,9 @@ class ELoginUser extends Request
     /** @var string */
     protected $password;
 
+    /** @var bool */
+    protected $remember;
+
     /**
      * @return string
      */
@@ -42,5 +45,21 @@ class ELoginUser extends Request
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRemember(): bool
+    {
+        return $this->remember;
+    }
+
+    /**
+     * @param bool $remember
+     */
+    public function setRemember(bool $remember): void
+    {
+        $this->remember = $remember;
     }
 }

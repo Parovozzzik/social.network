@@ -90,6 +90,15 @@ class Response extends Entity
     }
 
     /**
+     * @param $field
+     * @param $message
+     */
+    public function addError($field, $message): void
+    {
+        $this->errors = array_merge([$field => $message], $this->errors ?? []);
+    }
+
+    /**
      * @return string|null
      */
     public function getView(): ?string

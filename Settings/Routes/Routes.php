@@ -30,20 +30,24 @@ class Routes
                 'controller' => 'Users',
                 'action' => 'login'
             ],
-            '#^/users/view$#' => [
+            '#^/users/logout$#' => [
                 'controller' => 'Users',
-                'action' => 'login',
+                'action' => 'logout'
+            ],
+            '#^/users/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Users',
+                'action' => 'view',
                 'params' => [
-                    'id'
+                    'id',
                 ]
             ],
             '#^/users/restore-password$#' => [
                 'controller' => 'Users',
-                'action' => 'restorePassword'
+                'action' => 'restorePassword',
             ],
-            '#^/users/reset-password$#' => [
-                'controller' => 'User',
-                'action' => 'resetPassword'
+            '#^/users/change-password$#' => [
+                'controller' => 'Users',
+                'action' => 'changePassword',
             ],
         ];
     }

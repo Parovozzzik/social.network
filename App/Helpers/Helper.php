@@ -2,20 +2,15 @@
 
 namespace App\Helpers;
 
-
 /**
  * Class Helper
  * @package App\Helpers
  */
 class Helper
 {
-    /**
-     *
-     */
+    /** @var string */
     const DEFAULT_VIEWS_PATH = 'App' . DS . 'Views';
-    /**
-     *
-     */
+    /** @var string */
     const DEFAULT_VIEWS_EXT = 'twig';
 
     /**
