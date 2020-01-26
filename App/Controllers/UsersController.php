@@ -7,7 +7,7 @@ use App\Models\Entities\Requests\EChangePasswordUser;
 use App\Models\Entities\Requests\ELoginUser;
 use App\Models\Entities\Requests\ERegistrationUser;
 use App\Models\Entities\Responses\EUserListResponse;
-use App\Models\Entities\Responses\EUserResponse;
+use App\Models\Entities\Responses\Response;
 use App\Models\User;
 
 /**
@@ -26,9 +26,12 @@ class UsersController extends Controller
             'view' => !$this->isGuest,
             'login' => $this->isGuest,
             'registration' => $this->isGuest,
+            'confirmEmail' => true,
             'logout' => !$this->isGuest,
             'restorePassword' => !$this->isGuest,
             'changePassword' => !$this->isGuest,
+            'edit' => true,
+            'deleted' => true,
         ];
     }
 
@@ -60,9 +63,8 @@ class UsersController extends Controller
     {
         $id = $this->request['id'];
 
-        $userModel = new User();
-        $data = $userModel->get($id);
-        $response = new EUserResponse();
+        $data = (new User())->get($id);
+        $response = new Response();
 
         if (count($data) > 0) {
             $user = new EUser($data);
@@ -101,7 +103,7 @@ class UsersController extends Controller
                 $this->redirect('/users/view/' . $response->getUserId());
             }
         } else {
-            $response = new EUserResponse();
+            $response = new Response();
         }
         $response->setView('users.login');
 
@@ -141,7 +143,7 @@ class UsersController extends Controller
             $userModel = new User();
             $response = $userModel->registration($registrationDto);
         } else {
-            $response = new EUserResponse();
+            $response = new Response();
         }
         $response->setView('users.registration');
 
@@ -157,7 +159,10 @@ class UsersController extends Controller
     }
 
     /**
-     *
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function changePassword()
     {
@@ -174,7 +179,7 @@ class UsersController extends Controller
         } else {
             $userModel = new User();
             $data = $userModel->get($_SESSION['id']);
-            $response = new EUserResponse();
+            $response = new Response();
 
             if (count($data) > 0) {
                 $user = new EUser($data);
@@ -187,5 +192,24 @@ class UsersController extends Controller
         $response->setView('users.view_change_password');
 
         return $this->render($response, ['request' => $request]);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function confirmEmail()
+    {
+        //die(Helper::passwordHash('Tn9fhRzattBs'));
+        $email = $this->request['email'];
+        $code = $this->request['code'];
+
+        $userModel = new User();
+        $response = $userModel->confirmEmail($email, $code);
+        $response->setView('users.view_confirm_email');
+
+        return $this->render($response);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+include 'vendor/autoload.php';
+
 use Dotenv\Dotenv;
 use Phpmig\Adapter;
 use Settings\DB\DB;

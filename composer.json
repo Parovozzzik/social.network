@@ -1,7 +1,7 @@
 {
   "require": {
     "vlucas/phpdotenv": "^4.1",
-    "davedevelopment/phpmig": "^1.5",
+    "davedevelopment/phpmig": "^1.6",
     "ext-mysqli": "*",
     "ext-json": "*",
     "ext-xmlwriter": "*",
@@ -19,7 +19,10 @@
     "ext-soap": "*",
     "ext-mbstring": "*",
     "ext-dom": "*",
-    "twig/twig": "^3.0"
+    "twig/twig": "^3.0",
+    "mailgun/mailgun-php": "^3.0",
+    "kriswallsmith/buzz": "^1.0",
+    "nyholm/psr7": "^1.2"
   },
   "autoload": {
     "classmap": [

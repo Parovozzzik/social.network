@@ -11,8 +11,7 @@ class CreatePersonsTable extends Migration
      * Do the migration
      */
     public function up()
-    {
-        $db = $this->get('db');
+    {$db = $this->get('db');
         $db->query(
             "CREATE TABLE IF NOT EXISTS persons (
                 person_id INT(11) AUTO_INCREMENT PRIMARY KEY COMMENT 'Id of person.',
@@ -28,6 +27,7 @@ class CreatePersonsTable extends Migration
                 CONSTRAINT fk_persons_user_id FOREIGN KEY (user_id) REFERENCES users (user_id)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT 'Persons';"
         );
+
     }
 
     /**

@@ -7,7 +7,8 @@ use App\Models\Entities\EUser;
 use App\Models\Entities\Requests\EChangePasswordUser;
 use App\Models\Entities\Requests\ELoginUser;
 use App\Models\Entities\Requests\ERegistrationUser;
-use App\Models\Entities\Responses\EUserResponse;
+use App\Models\Entities\Responses\Response;
+use App\Services\MailgunService;
 
 /**
  * Class User
@@ -25,11 +26,11 @@ class User extends Model
 
     /**
      * @param ERegistrationUser $registrationUser
-     * @return EUserResponse
+     * @return Response
      */
-    public function registration(ERegistrationUser $registrationUser): EUserResponse
+    public function registration(ERegistrationUser $registrationUser): Response
     {
-        $response = new EUserResponse();
+        $response = new Response();
         if (trim($registrationUser->getEmail()) === '' || trim($registrationUser->getNewPassword()) === '') {
             if (trim($registrationUser->getEmail()) === '') {
                 $response->addError('email', 'Поле Email обязательно для заполнения!');
@@ -46,11 +47,24 @@ class User extends Model
         }
 
         if ($this->existsByEmail($registrationUser->getEmail()) === false) {
-            $query = $this->connection->prepare("INSERT INTO {$this->entity::$table} (email, password) VALUES (?, ?);");
+            $confirmCode = Helper::generateConfirmCode(12);
+            $confirmCodeHash = Helper::passwordHash($confirmCode);
+            $query = $this->connection->prepare("INSERT INTO {$this->entity::$table} 
+                (email, password, email_confirm_code) 
+                VALUES (?, ?, ?);");
             $query->bindParam(1, $registrationUser->getEmail());
             $query->bindParam(2, Helper::passwordHash($registrationUser->getNewPassword()));
+            $query->bindParam(3, $confirmCodeHash);
             $query->execute();
-            $response->setMessage('Учетная запись успешко зарегистрирована!');
+            $response->setMessage('Учетная запись успешно зарегистрирована!');
+
+            MailgunService::send(
+                $registrationUser->getEmail(),
+                $registrationUser->getEmail(),
+                'Учетная запись успешно зарегистрирована!',
+                '<a href="http://otus.my/users/confirm-email/' . $registrationUser->getEmail() . '/' . $confirmCode . '">Confirm email</a>'
+            );
+
         } else {
             $response->addError('email', 'Данный пользователь уже зарегистрирован!');
         }
@@ -63,11 +77,11 @@ class User extends Model
 
     /**
      * @param EChangePasswordUser $changePasswordUser
-     * @return EUserResponse
+     * @return Response
      */
-    public function changePassword(EChangePasswordUser $changePasswordUser): EUserResponse
+    public function changePassword(EChangePasswordUser $changePasswordUser): Response
     {
-        $response = new EUserResponse();
+        $response = new Response();
         $currentPassword = trim($changePasswordUser->getCurrentPassword());
 
         $newPassword = trim($changePasswordUser->getNewPassword());
@@ -96,7 +110,11 @@ class User extends Model
         }
 
         if ($response->getErrors() === null || count($response->getErrors()) === 0) {
-            $query = $this->connection->prepare("UPDATE {$this->entity::$table} SET password = ? WHERE user_id = ?;");
+            $query = $this->connection->prepare(
+                "UPDATE {$this->entity::$table} 
+                SET password = ? 
+                WHERE user_id = ?;"
+            );
             $query->bindParam(1, Helper::passwordHash($newPassword));
             $query->bindParam(2, $user['user_id']);
             $query->execute();
@@ -122,41 +140,26 @@ class User extends Model
 
     /**
      * @param string $email
-     * @return EUser
+     * @return EUser|null
      */
-    public function getByEmail(string $email): EUser
+    public function getByEmail(string $email): ?EUser
     {
         $query = $this->connection->prepare("SELECT * FROM {$this->entity::$table} WHERE email = ?;");
         $query->bindParam(1, $email);
         $query->execute();
 
-        return new EUser($query->fetch(\PDO::FETCH_ASSOC));
-    }
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
 
-    /**
-     * @return EUser[]|array
-     */
-    public function getList(): array
-    {
-        $query = $this->connection->prepare("SELECT * FROM {$this->entity::$table} WHERE deleted = 0;");
-        $query->execute();
-
-        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
-        $users = [];
-        foreach ($result as $item) {
-            $users[] = new EUser($item);
-        }
-
-        return $users;
+        return $result !== false ? new EUser($result) : null;
     }
 
     /**
      * @param ELoginUser $loginUser
-     * @return EUserResponse
+     * @return Response
      */
-    public function login(ELoginUser $loginUser): EUserResponse
+    public function login(ELoginUser $loginUser): Response
     {
-        $response = new EUserResponse();
+        $response = new Response();
 
         if (trim($loginUser->getEmail()) === '' || trim($loginUser->getPassword()) === '') {
             if (trim($loginUser->getEmail()) === '') {
@@ -232,5 +235,37 @@ class User extends Model
         }
 
         return false;
+    }
+
+    /**
+     * @param string $email
+     * @param string $code
+     * @return Response
+     */
+    public function confirmEmail(string $email, string $code): Response
+    {
+        $response = new Response();
+        $user = $this->getByEmail($email);
+        if ($user instanceof EUser) {
+            if ($user->emailConfirmCode !== null && Helper::passwordVerify($code, $user->emailConfirmCode)) {
+                $query = $this->connection->prepare(
+                    "UPDATE {$this->entity::$table} 
+                    SET email_confirm = 1, 
+                        email_confirm_code = null,
+                        email_confirmed_at = CURRENT_TIMESTAMP()
+                    WHERE user_id = ?;"
+                );
+                $query->bindParam(1, $user->userId);
+                $query->execute();
+
+                $response->setMessage('Email успешно подтвержден!');
+            } else {
+                $response->setErrors(['Код подтверждения неверный или устарел!']);
+            }
+        } else {
+            $response->setErrors(['Данный пользователь не зарегистрирован!']);
+        }
+
+        return $response;
     }
 }

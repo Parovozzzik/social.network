@@ -39,7 +39,7 @@ class Routes
                 'action' => 'view',
                 'params' => [
                     'id',
-                ]
+                ],
             ],
             '#^/users/restore-password$#' => [
                 'controller' => 'Users',
@@ -48,6 +48,34 @@ class Routes
             '#^/users/change-password$#' => [
                 'controller' => 'Users',
                 'action' => 'changePassword',
+            ],
+            '#^/users/confirm-email/(?P<email>.+)/(?P<code>.+)$#' => [
+                'controller' => 'Users',
+                'action' => 'confirmEmail',
+                'params' => [
+                    'email',
+                    'code',
+                ],
+            ],
+
+            '#^/persons$#' => [
+                'controller' => 'Persons',
+                'action' => 'Index'
+            ],
+            '#^/persons/my$#' => [
+                'controller' => 'Persons',
+                'action' => 'my',
+            ],
+            '#^/persons/create$#' => [
+                'controller' => 'Persons',
+                'action' => 'create',
+            ],
+            '#^/persons/view/(?P<id>[0-9-]+)$#' => [
+                'controller' => 'Persons',
+                'action' => 'view',
+                'params' => [
+                    'id',
+                ],
             ],
         ];
     }

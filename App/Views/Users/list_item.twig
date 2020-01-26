@@ -21,6 +21,20 @@
         </a>
     </td>
     <td class="g-valign-middle g-brd-top-none g-brd-bottom g-brd-gray-light-v7 g-py-15 g-py-30--md g-px-5 g-px-10--sm">
+    {% if (user.emailConfirm == 1) %}
+        <span class="d-flex align-items-center justify-content-center u-tags-v1 g-hidden-sm-down text-center g-width-150--sm g-brd-around g-bg-gray-light-v8 g-bg-gray-light-v8 g-font-size-default g-color-gray-dark-v6 g-rounded-50 g-py-4 g-px-15">
+            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+            Confirmed
+        </span>
+    {% else %}
+        <span class="d-flex align-items-center justify-content-center u-tags-v1 g-hidden-sm-down text-center g-width-150--sm g-brd-around g-bg-gray-light-v8 g-bg-gray-light-v8 g-font-size-default g-color-gray-dark-v6 g-rounded-50 g-py-4 g-px-15">
+            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightred-v3 g-mr-8"></span>
+            Not confirmed
+        </span>
+    {% endif %}
+    <span class="g-hidden-sm-up u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-lightblue-v3"></span>
+    </td>
+    <td class="g-valign-middle g-brd-top-none g-brd-bottom g-brd-gray-light-v7 g-py-15 g-py-30--md g-px-5 g-px-10--sm">
         {% if (user.deleted == 0) %}
         <span class="d-flex align-items-center justify-content-center u-tags-v1 g-hidden-sm-down text-center g-width-150--sm g-brd-around g-bg-gray-light-v8 g-bg-gray-light-v8 g-font-size-default g-color-gray-dark-v6 g-rounded-50 g-py-4 g-px-15">
             <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>

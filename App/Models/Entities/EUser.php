@@ -9,6 +9,9 @@ namespace App\Models\Entities;
  * @property integer $userId
  * @property string $email
  * @property string $password
+ * @property integer $emailConfirm
+ * @property string $emailConfirmCode
+ * @property integer $emailConfirmedAt
  * @property integer $deleted
  * @property integer $createdAt
  * @property integer $updatedAt

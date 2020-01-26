@@ -48,12 +48,13 @@ class Controller
     /**
      * @param Response $response
      * @param array $params
+     * @return string
      * @throws \ReflectionException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function render(Response $response, array $params = [])
+    public function render(Response $response, array $params = []): string
     {
         $loader = new FilesystemLoader('/');
         $twig = new Environment($loader);
@@ -75,7 +76,7 @@ class Controller
     /**
      * @param string $path
      */
-    public function redirect(string $path)
+    public function redirect(string $path): void
     {
         echo header('Location: ' . $path);
     }

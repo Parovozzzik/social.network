@@ -49,5 +49,5 @@ try {
         }
     }
 } catch (\Throwable $e) {
-    echo json_encode($e->getMessage());
+    echo json_encode($e->getTrace());
 }

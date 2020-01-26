@@ -51,4 +51,20 @@ class Model
 
         return $query->fetch(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * @return array
+     */
+    public function getList(): array
+    {
+        $query = $this->connection->prepare("SELECT * FROM {$this->entity::$table} WHERE deleted = 0;");
+        $query->execute();
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $users = [];
+        foreach ($result as $item) {
+            $users[] = new $this->entity($item);
+        }
+
+        return $users;
+    }
 }
