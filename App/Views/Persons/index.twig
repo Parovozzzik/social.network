@@ -41,7 +41,7 @@
 
         <tbody class="g-font-size-default g-color-black" id="accordion-09" role="tablist" aria-multiselectable="true">
         {% for person in data.persons %}
-            {{ include ('/App/Views/Users/list_item.twig', {person: person}) }}
+            {{ include ('/App/Views/Persons/list_item.twig', {person: person}) }}
         {% endfor %}
         </tbody>
     </table>

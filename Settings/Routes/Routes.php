@@ -57,7 +57,6 @@ class Routes
                     'code',
                 ],
             ],
-
             '#^/persons$#' => [
                 'controller' => 'Persons',
                 'action' => 'Index'

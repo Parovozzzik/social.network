@@ -54,7 +54,7 @@ class Controller
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function render(Response $response, array $params = []): string
+    public function render(Response $response, array $params = [])
     {
         $loader = new FilesystemLoader('/');
         $twig = new Environment($loader);
