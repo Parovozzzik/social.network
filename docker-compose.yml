@@ -56,7 +56,7 @@ services:
     links:
       - mysql
     ports:
-      - 8000:80
+      - 8001:8001
     networks:
       - code-network
 
