@@ -23,7 +23,7 @@ services:
       - /usr/local/www/otus/social.network:/usr/local/www/otus/social.network
       - /usr/local/www/otus/social.network/Settings/Docker/nginx/conf.d/social.network.conf:/etc/nginx/conf.d/social.network.conf
     ports:
-      - 80:80
+      - 82:82
     networks:
       - code-network
     depends_on:
@@ -39,7 +39,7 @@ services:
       - MYSQL_PASSWORD=dinhO959
       - MYSQL_DATABASE=social.network
     ports:
-      - 3306:3306
+      - 3307:3307
     networks:
       - code-network
 
