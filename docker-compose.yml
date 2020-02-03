@@ -39,7 +39,7 @@ services:
       - MYSQL_PASSWORD=dinhO959
       - MYSQL_DATABASE=social.network
     ports:
-      - 3307:3307
+      - 33060:3306
     networks:
       - code-network
 
@@ -49,6 +49,7 @@ services:
     environment:
       - PMA_ARBITRARY=0
       - PMA_HOST=mysql
+      - PMA_PORT=3306
     volumes:
       - /sessions
     depends_on:
@@ -56,7 +57,7 @@ services:
     links:
       - mysql
     ports:
-      - 8001:8001
+      - 8082:80
     networks:
       - code-network
 
