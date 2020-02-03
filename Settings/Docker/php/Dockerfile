@@ -45,10 +45,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 #ADD cron.d/ludoman /etc/cron.d/ludoman
 
-WORKDIR /usr/local/var/www/otus/social.network
+WORKDIR /usr/local/www/otus/social.network
 
-RUN chown -R www-data:www-data /usr/local/var/www/
-RUN chmod 755 /usr/local/var/www/
+RUN chown -R www-data:www-data /usr/local/www/
+RUN chmod 755 /usr/local/www/
 
 #RUN chown -R www-data:www-data /usr/local/var/www/otus/social.network/vendor
 #RUN chown -R www-data:www-data /usr/local/var/www/otus/social.network/storage
