@@ -3,22 +3,18 @@
 
 <head>
     <!-- Title -->
-    <title>{{ content }}</title>
-    {% include 'layout_head.twig' %}
+    <title>{{ title }}</title>
+    {{ include('/App/Views/Templates/layout_head.twig') }}
 </head>
-
-
 <body>
-{% include 'layout_header.twig' %}
-
-
+{{ include('/App/Views/Templates/layout_header.twig') }}
 <main class="container-fluid px-0 g-pt-65">
     <div class="row no-gutters g-pos-rel g-overflow-x-hidden">
-        {% include 'sidebar_nav.twig' %}
+        {{ include('/App/Views/Templates/sidebar_nav.twig') }}
         {% include content %}
     </div>
 </main>
-{% include 'layout_footer.twig' %}
+{{ include('/App/Views/Templates/layout_footer.twig') }}
 </body>
 
 </html>
