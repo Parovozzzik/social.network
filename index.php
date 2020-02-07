@@ -3,7 +3,7 @@
 include 'vendor/autoload.php';
 
 use Dotenv\Dotenv;
-use Settings\Routes\Routes;
+use App\Settings\Routes\Routes;
 
 define('DS', DIRECTORY_SEPARATOR);
 

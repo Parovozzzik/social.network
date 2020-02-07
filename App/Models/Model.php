@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Entities\Entity;
-use Settings\DB\DB;
+use App\Settings\DB\DB;
 
 /**
  * Class Model

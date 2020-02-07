@@ -4,7 +4,7 @@ include 'vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Phpmig\Adapter;
-use Settings\DB\DB;
+use App\Settings\DB\DB;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
