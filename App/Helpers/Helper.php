@@ -39,15 +39,18 @@ class Helper
     public static function getViewPath(string $path): string
     {
         $paths = explode('.', $path);
-        $paths = array_map(
-            function ($path) use ($paths) {
-                if ($path !== end($paths)) {
-                    $path = ucfirst($path);
-                }
-                return $path;
-            }, $paths
-        );
-        $systemPath = implode(DS, $paths);
+
+        $newPath = [];
+        $last = array_key_last($paths);
+        foreach ($paths as $key => $path) {
+            if ($key !== $last) {
+                $newPath[] = ucfirst($path);
+            } else {
+                $newPath[] = $path;
+            }
+        }
+
+        $systemPath = implode(DS, $newPath);
 
         return self::DEFAULT_VIEWS_PATH . DS . $systemPath . '.' . self::DEFAULT_VIEWS_EXT;
     }
