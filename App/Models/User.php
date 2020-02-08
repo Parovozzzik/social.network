@@ -211,7 +211,7 @@ class User extends Model
                 return true;
             } else {
                 $user = $this->get($_SESSION['id']);
-                if ($user['user_id'] === $_SESSION['id']) {
+                if ($user !== false && $user['user_id'] === $_SESSION['id']) {
                     setcookie('email', $user['email'], time() + 50000, '/');
                     setcookie('password', $user['password'], time() + 50000, '/');
 
@@ -228,11 +228,11 @@ class User extends Model
                         return true;
                     }
                 }
-
-                setcookie('email', '', time() - 360000, '/');
-                setcookie('password', '', time() - 360000, '/');
             }
         }
+
+        setcookie('email', '', time() - 360000, '/');
+        setcookie('password', '', time() - 360000, '/');
 
         return false;
     }
