@@ -62,7 +62,7 @@ class User extends Model
                 $registrationUser->getEmail(),
                 $registrationUser->getEmail(),
                 'Учетная запись успешно зарегистрирована!',
-                '<a href="http://otus.my/users/confirm-email/' . $registrationUser->getEmail() . '/' . $confirmCode . '">Confirm email</a>'
+                '<a href="http://' . Helper::getFullDomain() . '/users/confirm-email/' . $registrationUser->getEmail() . '/' . $confirmCode . '">Confirm email</a>'
             );
 
         } else {

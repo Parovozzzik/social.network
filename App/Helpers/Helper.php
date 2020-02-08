@@ -70,4 +70,13 @@ class Helper
 
         return $string;
     }
+
+    /**
+     * @return string
+     */
+    public static function getFullDomain(): string
+    {
+        return getenv('DOMAIN') . ((int)getenv('PORT') !== 80 ? getenv('PORT') : '');
+    }
+
 }
