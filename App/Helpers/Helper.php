@@ -76,7 +76,7 @@ class Helper
      */
     public static function getFullDomain(): string
     {
-        return getenv('DOMAIN') . ((int)getenv('PORT') !== 80 ? getenv('PORT') : '');
+        return getenv('DOMAIN') . ((int)getenv('PORT') !== 80 ? ':' . getenv('PORT') : '');
     }
 
 }
