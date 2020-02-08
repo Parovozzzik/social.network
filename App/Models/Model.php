@@ -38,9 +38,9 @@ class Model
 
     /**
      * @param int $id
-     * @return array
+     * @return array|null
      */
-    public function get(int $id): array
+    public function get(int $id): ?array
     {
         $query = $this->connection->prepare(
             "SELECT * 
@@ -49,7 +49,11 @@ class Model
         $query->bindParam(1, $id);
         $query->execute();
 
-        return $query->fetch(\PDO::FETCH_ASSOC);
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
+        if ($result === false) {
+            $result = null;
+        }
+        return $result;
     }
 
     /**
