@@ -1,10 +1,10 @@
 <?php
 
-namespace Settings\Routes;
+namespace App\Settings\Routes;
 
 /**
  * Class Routes
- * @package Settings\Routes
+ * @package App\Settings\Routes
  */
 class Routes
 {

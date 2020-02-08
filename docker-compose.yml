@@ -9,7 +9,7 @@ services:
 
   php:
     build:
-      context: Settings/Docker/php
+      context: App/Settings/Docker/php
     container_name: otus.php
     volumes:
       - /usr/local/www/otus/social.network:/usr/local/www/otus/social.network
@@ -21,7 +21,7 @@ services:
     container_name: otus.nginx
     volumes:
       - /usr/local/www/otus/social.network:/usr/local/www/otus/social.network
-      - /usr/local/www/otus/social.network/Settings/Docker/nginx/conf.d/social.network.conf:/etc/nginx/conf.d/social.network.conf
+      - /usr/local/www/otus/social.network/App/Settings/Docker/nginx/conf.d/social.network.conf:/etc/nginx/conf.d/social.network.conf
     ports:
       - 82:82
     networks:

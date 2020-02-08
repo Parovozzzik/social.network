@@ -1,12 +1,12 @@
 <?php
 
-namespace Settings\DB;
+namespace App\Settings\DB;
 
 use PDO;
 
 /**
  * Class DB
- * @package Settings\DB
+ * @package App\Settings\DB
  */
 class DB
 {
