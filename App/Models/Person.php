@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Entities\EPerson;
-use App\Models\Entities\Requests\ECreatePerson;
+use App\Models\Entities\Requests\EPersonRequest;
 use App\Models\Entities\Responses\Response;
 
 /**
@@ -37,11 +37,34 @@ class Person extends Model
     }
 
     /**
-     * @param ECreatePerson $person
+     * @param EPersonRequest $person
      * @return Response
      * @throws \Exception
      */
-    public function create(ECreatePerson $person)
+    public function save(EPersonRequest $person)
+    {
+        $response = $this->validate($person);
+
+        if ($response->getErrors() === null) {
+            if ($person->getPersonId() === null) {
+                $personId = $this->insert($person);
+                $person->setPersonId($personId);
+            } else {
+                $this->update($person);
+            }
+            $response->setModel($person);
+            $response->setMessage('Персональные данные успешно сохранены!');
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param EPersonRequest $person
+     * @return Response
+     * @throws \Exception
+     */
+    protected function validate(EPersonRequest $person): Response
     {
         $response = new Response();
         if (trim($person->getFirstName()) === '') {
@@ -60,21 +83,58 @@ class Person extends Model
             $response->addError('dateBirth', '18+');
         }
 
-        if ($response->getErrors() === null) {
-            $query = $this->connection->prepare(
-                "INSERT INTO {$this->entity::$table} 
-                (user_id, first_name, last_name, date_birth, gender) 
-                VALUES (?, ?, ?, ?, ?);"
-            );
-            $query->bindParam(1, $person->getUserId());
-            $query->bindParam(2, $person->getFirstName());
-            $query->bindParam(3, $person->getLastName());
-            $query->bindParam(4, $person->getDateBirth()->format('Y-m-d'));
-            $query->bindParam(5, $person->getGender());
-            $query->execute();
-            $response->setMessage('Персональные данные успешно сохранены!');
+        return $response;
+    }
+
+    /**
+     * @param EPersonRequest $person
+     * @return int|null
+     */
+    protected function insert(EPersonRequest $person): ?int
+    {
+        $query = $this->connection->prepare(
+            "INSERT INTO {$this->entity::$table} 
+                (user_id, first_name, last_name, date_birth, gender, hobbies) 
+                VALUES (?, ?, ?, ?, ?, ?);"
+        );
+        $query->bindParam(1, $person->getUserId());
+        $query->bindParam(2, $person->getFirstName());
+        $query->bindParam(3, $person->getLastName());
+        $query->bindParam(4, $person->getDateBirth()->format('Y-m-d'));
+        $query->bindParam(5, $person->getGender());
+        $query->bindParam(6, $person->getHobbies());
+
+
+        if ($query->execute() !== false) {
+            return $query->insert_id;
         }
 
-        return $response;
+        return null;
+    }
+
+    /**
+     * @param EPersonRequest $person
+     * @return int|null
+     */
+    protected function update(EPersonRequest $person): ?int
+    {
+        $query = $this->connection->prepare(
+            "UPDATE {$this->entity::$table} 
+                SET first_name = ?, last_name = ?, date_birth = ?, gender = ?, hobbies = ? 
+                WHERE person_id = ?;"
+        );
+
+        $query->bindParam(1, $person->getFirstName());
+        $query->bindParam(2, $person->getLastName());
+        $query->bindParam(3, $person->getDateBirth()->format('Y-m-d'));
+        $query->bindParam(4, $person->getGender());
+        $query->bindParam(5, $person->getHobbies());
+        $query->bindParam(6, $person->getPersonId());
+
+        if ($query->execute() !== false) {
+            return $query->id;
+        }
+
+        return null;
     }
 }

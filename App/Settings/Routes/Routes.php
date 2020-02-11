@@ -69,6 +69,10 @@ class Routes
                 'controller' => 'Persons',
                 'action' => 'create',
             ],
+            '#^/persons/edit$#' => [
+                'controller' => 'Persons',
+                'action' => 'edit',
+            ],
             '#^/persons/view/(?P<id>[0-9-]+)$#' => [
                 'controller' => 'Persons',
                 'action' => 'view',
