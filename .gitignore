@@ -1,3 +1,5 @@
 vendor/
 .env
 .idea/
+docker-compose-local.yml
+App/Settings/DockerLocal/
