@@ -57,6 +57,11 @@ class Routes
                     'code',
                 ],
             ],
+            '#^/users/resend-confirm-email$#' => [
+                'controller' => 'Users',
+                'action' => 'resendConfirmEmail',
+            ],
+
             '#^/persons$#' => [
                 'controller' => 'Persons',
                 'action' => 'Index'

@@ -43,7 +43,10 @@ try {
         $rules = $class->rules();
 
         if ($rules[$actionName]) {
-            $class->$actionName();
+            $result = $class->$actionName();
+            if (is_array($result)) {
+                echo json_encode($result);
+            }
         } else {
             echo header('Location: ' . '/');
         }

@@ -268,4 +268,40 @@ class User extends Model
 
         return $response;
     }
+
+    /**
+     * @param string $email
+     * @return Response
+     */
+    public function resendConfirmEmail(string $email): Response
+    {
+        $response = new Response();
+        $user = $this->getByEmail($email);
+        if ($user instanceof EUser) {
+            $confirmCode = Helper::generateConfirmCode(12);
+            $confirmCodeHash = Helper::passwordHash($confirmCode);
+            $query = $this->connection->prepare(
+                "UPDATE {$this->entity::$table} 
+                    SET email_confirm_code = ?,
+                        updated_at = CURRENT_TIMESTAMP()
+                    WHERE user_id = ?;"
+            );
+            $query->bindParam(1, $confirmCodeHash);
+            $query->bindParam(2, $user->userId);
+            $query->execute();
+
+            $response->setMessage('Email с новым кодом подтверждения успешно отправлен!');
+
+            MailgunService::send(
+                $email,
+                $email,
+                'Подтверждение регистрации!',
+                '<a href="http://' . Helper::getFullDomain() . '/users/confirm-email/' . $email . '/' . $confirmCode . '">Confirm email</a>'
+            );
+        } else {
+            $response->setErrors(['Данный пользователь не зарегистрирован!']);
+        }
+
+        return $response;
+    }
 }
