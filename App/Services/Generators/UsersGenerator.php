@@ -5,10 +5,10 @@ namespace App\Services\Generators;
 use App\Helpers\Helper;
 
 /**
- * Class UserGenerator
+ * Class UsersGenerator
  * @package App\Services\Generators
  */
-class UserGenerator extends AbstractGenerator
+class UsersGenerator extends AbstractGenerator
 {
     /**
      * @return bool

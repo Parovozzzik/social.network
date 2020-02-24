@@ -3,10 +3,10 @@
 namespace App\Services\Generators;
 
 /**
- * Class ProfileGenerator
+ * Class PersonsGenerator
  * @package App\Services\Generators
  */
-class ProfileGenerator extends AbstractGenerator
+class PersonsGenerator extends AbstractGenerator
 {
     /**
      * @return bool
