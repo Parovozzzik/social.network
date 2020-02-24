@@ -21,6 +21,51 @@ class Person extends Model
     /** @var string */
     public $entityName = EPerson::class;
 
+    public function getList(array $params = []): array
+    {
+        $queryWhere = '';
+        $queryLimit = '';
+        $queryOffset = '';
+        if (count($params) > 0) {
+            if (isset($params['firstName']) && isset($params['lastName'])) {
+                $queryWhere = 'AND (
+                    first_name LIKE \'' . $params['firstName'] . '%\' OR 
+                    last_name LIKE \'' . $params['lastName'] . '%\'
+                    )';
+            } else {
+                if (isset($params['firstName'])) {
+                    $queryWhere = 'AND first_name = \'' . $params['firstName'] . '\'';
+                }
+                if (isset($params['lastName'])) {
+                    $queryWhere = 'AND last_name = \'' . $params['lastName'] . '\'';
+                }
+            }
+
+            if (isset($params['limit'])) {
+                $queryLimit = 'LIMIT ' . $params['limit'];
+            }
+            if (isset($params['offset'])) {
+                $queryOffset = 'OFFSET ' . $params['offset'];
+            }
+        }
+
+        $query = $this->connection->prepare(
+            "SELECT * 
+            FROM {$this->entity::$table} 
+            WHERE deleted = 0 $queryWhere
+            $queryLimit
+            $queryOffset;"
+        );
+        $query->execute();
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $users = [];
+        foreach ($result as $item) {
+            $users[] = new $this->entity($item);
+        }
+
+        return $users;
+    }
+
     /**
      * @param int $userId
      * @return EPerson|null

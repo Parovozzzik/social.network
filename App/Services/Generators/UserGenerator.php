@@ -1,14 +1,18 @@
 <?php
 
-
 namespace App\Services\Generators;
 
 use App\Helpers\Helper;
 
+/**
+ * Class UserGenerator
+ * @package App\Services\Generators
+ */
 class UserGenerator extends AbstractGenerator
 {
-    protected $command = 'generate-users';
-
+    /**
+     * @return bool
+     */
     public function run()
     {
         $password = '1234567';

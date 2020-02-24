@@ -39,7 +39,19 @@ class PersonsController extends Controller
      */
     public function index()
     {
-        $persons = (new Person())->getList();
+        $params = [];
+        $firstName = $this->request['firstName'];
+        if (isset($firstName)) {
+            $params['firstName'] = $firstName;
+        }
+        $lastName = $this->request['lastName'];
+        if (isset($lastName)) {
+            $params['lastName'] = $lastName;
+        }
+        $params['limit'] = $this->request['limit'] ?? 25;
+        $params['offset'] = ($this->request['page'] ?? 1) * $params['limit'] - $params['limit'];
+
+        $persons = (new Person())->getList($params);
 
         $response = new EPersonListResponse();
         $response->setPersons($persons);

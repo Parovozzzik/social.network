@@ -57,18 +57,35 @@ class Model
     }
 
     /**
+     * @param array $params
      * @return array
      */
-    public function getList(): array
+    public function getList(array $params = []): array
     {
-        $query = $this->connection->prepare("SELECT * FROM {$this->entity::$table} WHERE deleted = 0;");
-        $query->execute();
-        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
-        $users = [];
-        foreach ($result as $item) {
-            $users[] = new $this->entity($item);
+        $queryWhere = '';
+        if (count($params) > 0) {
+            if (isset($params['limit'])) {
+                $queryLimit = 'LIMIT ' . $params['limit'];
+            }
+            if (isset($params['offset'])) {
+                $queryOffset = 'OFFSET ' . $params['offset'];
+            }
         }
 
-        return $users;
+        $query = $this->connection->prepare(
+            "SELECT * 
+            FROM {$this->entity::$table} 
+            WHERE deleted = 0 $queryWhere
+            $queryLimit
+            $queryOffset;"
+        );
+        $query->execute();
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $items = [];
+        foreach ($result as $item) {
+            $items[] = new $this->entity($item);
+        }
+
+        return $items;
     }
 }

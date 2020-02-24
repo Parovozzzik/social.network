@@ -2,10 +2,15 @@
 
 namespace App\Services\Generators;
 
+/**
+ * Class ProfileGenerator
+ * @package App\Services\Generators
+ */
 class ProfileGenerator extends AbstractGenerator
 {
-    protected $command = 'generate-profiles';
-
+    /**
+     * @return bool
+     */
     public function run()
     {
         $total = $this->db->query(
@@ -46,6 +51,9 @@ class ProfileGenerator extends AbstractGenerator
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function generatePersonInfo(): array
     {
         $file = file_get_contents('App/Settings/DB/files/names.json');
