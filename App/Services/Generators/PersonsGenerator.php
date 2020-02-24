@@ -29,8 +29,6 @@ class PersonsGenerator extends AbstractGenerator
             LIMIT $limit OFFSET $offset;"
             )->fetchAll(\PDO::FETCH_COLUMN);
 
-
-
             $valiesString = '';
             $queryString = "INSERT INTO persons (user_id, first_name, last_name, date_birth, gender) VALUES ";
             $persons = $this->generatePersonInfo();
