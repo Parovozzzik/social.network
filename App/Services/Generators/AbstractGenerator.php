@@ -4,6 +4,10 @@ namespace App\Services\Generators;
 
 use App\Settings\DB\DB;
 
+/**
+ * Class AbstractGenerator
+ * @package App\Services\Generators
+ */
 abstract class AbstractGenerator
 {
     /** @var \PDO */
