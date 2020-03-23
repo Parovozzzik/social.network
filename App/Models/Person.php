@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Entities\EPerson;
 use App\Models\Entities\Requests\EPersonRequest;
 use App\Models\Entities\Responses\Response;
+use App\Settings\DB\DB;
 
 /**
  * Class Person
@@ -21,8 +22,14 @@ class Person extends Model
     /** @var string */
     public $entityName = EPerson::class;
 
+    /**
+     * @param array $params
+     * @return array
+     */
     public function getList(array $params = []): array
     {
+        $this->connection = DB::connection(getenv('DB_HOST_SLAVE'));
+
         $queryWhere = '';
         $queryLimit = '';
         $queryOffset = '';
