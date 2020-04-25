@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Entities\EPerson;
-use App\Models\Entities\Requests\ECreatePerson;
+use App\Models\Entities\Requests\EPersonRequest;
 use App\Models\Entities\Requests\ELoginUser;
 use App\Models\Entities\Responses\EPersonListResponse;
 use App\Models\Entities\Responses\Response;
@@ -26,6 +26,7 @@ class PersonsController extends Controller
             'view' => !$this->isGuest,
             'my' => !$this->isGuest,
             'create' => !$this->isGuest,
+            'edit' => !$this->isGuest,
         ];
     }
 
@@ -38,7 +39,19 @@ class PersonsController extends Controller
      */
     public function index()
     {
-        $persons = (new Person())->getList();
+        $params = [];
+        $firstName = $this->request['firstName'];
+        if (isset($firstName)) {
+            $params['firstName'] = $firstName;
+        }
+        $lastName = $this->request['lastName'];
+        if (isset($lastName)) {
+            $params['lastName'] = $lastName;
+        }
+        $params['limit'] = $this->request['limit'] ?? 25;
+        $params['offset'] = ($this->request['page'] ?? 1) * $params['limit'] - $params['limit'];
+
+        $persons = (new Person())->getList($params);
 
         $response = new EPersonListResponse();
         $response->setPersons($persons);
@@ -112,24 +125,68 @@ class PersonsController extends Controller
         $response = new Response();
 
         if (isset($request)) {
-            $createPerson = new ECreatePerson($request);
-            $createPerson->setFirstName($request['firstName']);
-            $createPerson->setLastName($request['lastName']);
-            $dateBirth = (new \DateTime())::createFromFormat('Y.m.d', $request['dateBirth']);
-            $createPerson->setDateBirth($dateBirth === false ? new \DateTime() : $dateBirth);
-            $createPerson->setGender($request['gender']);
-            $createPerson->setUserId($this->user->userId);
-
-            $personModel = new Person();
-            $response = $personModel->create($createPerson);
-
-            if ($response->getErrors() === null) {
-                $this->redirect('/persons/my');
-            }
+            $response = $this->save($person, $request);
         }
 
         $response->setView('persons.create');
 
         return $this->render($response, ['request' => $request]);
+    }
+
+    /**
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function edit()
+    {
+        $person = (new Person())->getByUserId($this->user->userId);
+
+        if (!$person instanceof EPerson) {
+            $this->redirect('/persons/create');
+        }
+
+        $request = $_POST['person'];
+        $response = new Response();
+
+        if (isset($request)) {
+            $response = $this->save($person, $request);
+        } else {
+            $request = $person->toArray();
+        }
+
+        $response->setView('persons.create');
+
+        return $this->render($response, ['request' => $request]);
+    }
+
+    /**
+     * @param EPerson|null $person
+     * @param array $request
+     * @return Response
+     * @throws \Exception
+     */
+    protected function save(?EPerson $person, array $request): Response
+    {
+        $createPerson = new EPersonRequest($request);
+        $createPerson->setPersonId($person->personId ?? null);
+        $createPerson->setFirstName($request['firstName']);
+        $createPerson->setLastName($request['lastName']);
+        $dateBirth = (new \DateTime())::createFromFormat('Y.m.d', $request['dateBirth']);
+        $createPerson->setDateBirth($dateBirth === false ? new \DateTime() : $dateBirth);
+        $createPerson->setGender($request['gender']);
+        $createPerson->setUserId($this->user->userId);
+        $createPerson->setHobbies($request['hobbies']);
+
+        $personModel = new Person();
+        $response = $personModel->save($createPerson);
+
+        if ($response->getErrors() === null) {
+            $this->redirect('/persons/my');
+        }
+
+        return $response;
     }
 }

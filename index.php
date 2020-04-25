@@ -43,11 +43,14 @@ try {
         $rules = $class->rules();
 
         if ($rules[$actionName]) {
-            $class->$actionName();
+            $result = $class->$actionName();
+            if (is_array($result)) {
+                echo json_encode($result);
+            }
         } else {
             echo header('Location: ' . '/');
         }
     }
 } catch (\Throwable $e) {
-    echo json_encode($e->getTrace());
+    echo json_encode($e->getMessage());
 }

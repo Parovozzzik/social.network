@@ -29,19 +29,37 @@ services:
     depends_on:
       - fpm
 
-  mysql:
-    image: mysql:latest
-    container_name: otus.mysql
-    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0cd
-    environment:
-      - MYSQL_ROOT_PASSWORD=dinhO959
-      - MYSQL_USER=parovozzzik
-      - MYSQL_PASSWORD=dinhO959
-      - MYSQL_DATABASE=social.network
+  mysql_master:
+    image: mysql:5.7
+    env_file:
+      - App/Settings/DockerLocal/mysql/master/mysql.master.env
+    container_name: otus.mysql.master
+    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
+    restart: "no"
     ports:
-      - 33060:3306
+      - 4406:3306
+    volumes:
+      - /usr/local/var/www/otus/social.network/App/Settings/DockerLocal/mysql/master/conf/mysql.master.conf.cnf:/etc/mysql/conf.d/mysql.master.conf.cnf
+      - /usr/local/var/www/otus/social.network/App/Settings/DockerLocal/mysql/master/data:/var/lib/mysql
     networks:
       - code-network
+
+    mysql_slave:
+      image: mysql:5.7
+      env_file:
+        - App/Settings/DockerLocal/mysql/slave/mysql.slave.env
+      container_name: otus.mysql.slave
+      command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
+      restart: "no"
+      ports:
+        - 5506:3306
+      depends_on:
+        - mysql_master
+      volumes:
+        - /usr/local/var/www/otus/social.network/App/Settings/DockerLocal/mysql/slave/conf/mysql.slave.conf.cnf:/etc/mysql/conf.d/mysql.slave.conf.cnf
+        - /usr/local/var/www/otus/social.network/App/Settings/DockerLocal/mysql/slave/data:/var/lib/mysql
+      networks:
+        - code-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -53,9 +71,9 @@ services:
     volumes:
       - /sessions
     depends_on:
-      - mysql
+      - mysql_master
     links:
-      - mysql
+      - mysql_master
     ports:
       - 8082:80
     networks:

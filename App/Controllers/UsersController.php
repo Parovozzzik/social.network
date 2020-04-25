@@ -32,6 +32,7 @@ class UsersController extends Controller
             'changePassword' => !$this->isGuest,
             'edit' => true,
             'deleted' => true,
+            'resendConfirmEmail' => !$this->isGuest,
         ];
     }
 
@@ -202,7 +203,6 @@ class UsersController extends Controller
      */
     public function confirmEmail()
     {
-        //die(Helper::passwordHash('Tn9fhRzattBs'));
         $email = $this->request['email'];
         $code = $this->request['code'];
 
@@ -211,5 +211,17 @@ class UsersController extends Controller
         $response->setView('users.view_confirm_email');
 
         return $this->render($response);
+    }
+
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function resendConfirmEmail()
+    {
+        $userModel = new User();
+        $response = $userModel->resendConfirmEmail($this->user->email);
+
+        return $response->toArray();
     }
 }

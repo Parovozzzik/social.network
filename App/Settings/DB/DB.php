@@ -14,12 +14,15 @@ class DB
     protected static $connection;
 
     /**
-     * @return \PDO
+     * @param string $host
+     * @return PDO
      */
-    public static function connection(): PDO
+    public static function connection(string $host = ''): PDO
     {
         //if (!self::$connection instanceof PDO) {
-        $host = getenv('DB_HOST');
+        if ($host === '') {
+            $host = getenv('DB_HOST_MASTER');
+        }
         $user = getenv('DB_USER');
         $password = getenv('DB_PASSWORD');
         $database = getenv('DB_DATABASE');
@@ -27,7 +30,7 @@ class DB
 
         $dns = 'mysql' . ':host=' . $host . ((!empty($port)) ? (';port=' . $port) : '') . ';dbname=' . $database;
 
-        self::$connection = (new PDO($dns, $user, $password));
+        self::$connection = new PDO($dns, $user, $password);
         //}
 
         return self::$connection;

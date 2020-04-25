@@ -57,6 +57,11 @@ class Routes
                     'code',
                 ],
             ],
+            '#^/users/resend-confirm-email$#' => [
+                'controller' => 'Users',
+                'action' => 'resendConfirmEmail',
+            ],
+
             '#^/persons$#' => [
                 'controller' => 'Persons',
                 'action' => 'Index'
@@ -68,6 +73,10 @@ class Routes
             '#^/persons/create$#' => [
                 'controller' => 'Persons',
                 'action' => 'create',
+            ],
+            '#^/persons/edit$#' => [
+                'controller' => 'Persons',
+                'action' => 'edit',
             ],
             '#^/persons/view/(?P<id>[0-9-]+)$#' => [
                 'controller' => 'Persons',

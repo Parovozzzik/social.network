@@ -62,7 +62,7 @@ class User extends Model
                 $registrationUser->getEmail(),
                 $registrationUser->getEmail(),
                 'Учетная запись успешно зарегистрирована!',
-                '<a href="http://otus.my/users/confirm-email/' . $registrationUser->getEmail() . '/' . $confirmCode . '">Confirm email</a>'
+                '<a href="http://' . Helper::getFullDomain() . '/users/confirm-email/' . $registrationUser->getEmail() . '/' . $confirmCode . '">Confirm email</a>'
             );
 
         } else {
@@ -211,7 +211,7 @@ class User extends Model
                 return true;
             } else {
                 $user = $this->get($_SESSION['id']);
-                if ($user['user_id'] === $_SESSION['id']) {
+                if ($user !== false && $user['user_id'] === $_SESSION['id']) {
                     setcookie('email', $user['email'], time() + 50000, '/');
                     setcookie('password', $user['password'], time() + 50000, '/');
 
@@ -228,11 +228,11 @@ class User extends Model
                         return true;
                     }
                 }
-
-                setcookie('email', '', time() - 360000, '/');
-                setcookie('password', '', time() - 360000, '/');
             }
         }
+
+        setcookie('email', '', time() - 360000, '/');
+        setcookie('password', '', time() - 360000, '/');
 
         return false;
     }
@@ -262,6 +262,42 @@ class User extends Model
             } else {
                 $response->setErrors(['Код подтверждения неверный или устарел!']);
             }
+        } else {
+            $response->setErrors(['Данный пользователь не зарегистрирован!']);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param string $email
+     * @return Response
+     */
+    public function resendConfirmEmail(string $email): Response
+    {
+        $response = new Response();
+        $user = $this->getByEmail($email);
+        if ($user instanceof EUser) {
+            $confirmCode = Helper::generateConfirmCode(12);
+            $confirmCodeHash = Helper::passwordHash($confirmCode);
+            $query = $this->connection->prepare(
+                "UPDATE {$this->entity::$table} 
+                    SET email_confirm_code = ?,
+                        updated_at = CURRENT_TIMESTAMP()
+                    WHERE user_id = ?;"
+            );
+            $query->bindParam(1, $confirmCodeHash);
+            $query->bindParam(2, $user->userId);
+            $query->execute();
+
+            $response->setMessage('Email с новым кодом подтверждения успешно отправлен!');
+
+            MailgunService::send(
+                $email,
+                $email,
+                'Подтверждение регистрации!',
+                '<a href="http://' . Helper::getFullDomain() . '/users/confirm-email/' . $email . '/' . $confirmCode . '">Confirm email</a>'
+            );
         } else {
             $response->setErrors(['Данный пользователь не зарегистрирован!']);
         }
